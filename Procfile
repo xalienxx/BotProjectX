@@ -1,2 +1,2 @@
-web: python -m hunterx
+worker: python3 main.py
  
