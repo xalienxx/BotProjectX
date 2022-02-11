@@ -21,7 +21,13 @@ KeyboardZ = ReplyKeyboardMarkup(
     resize_keyboard=True)
 
 
-
+@bot.on_message((filters.command("start") | filters.regex('Start')) & filters.private & ~filters.edited)
+def command(bot, message):
+    bot.send_message(
+        chat_id=message.chat.id,
+        text="""Hi Test Buttn!""",
+        parse_mode="html",
+        reply_markup=KeyboardZ)
 
 @bot.on_message(filters.incoming & filters.command("run"))
 def command(bot, message):
@@ -32,9 +38,9 @@ def command(bot, message):
 def command(bot, message):
     bot.send_photo(message.chat.id, "https://telegra.ph/file/4089e363161303efe4b79.png", ttl_seconds=10)
   
-@bot.on_message(filters.incoming & filters.command("audio"))
-def command(bot, message):
+@bot.on_message(filters.incoming & (filters.command("audio") | filters.regex('Test Audio')) )
     bot.send_audio(message.chat.id, "https://mikasalinkgen.herokuapp.com/663/Love+Me+Now+-+John+Legend+%5BUSSM11606983%5D+%28128%29.mp3")
+  
 
 @bot.on_inline_query()
 def answer(client, inline_query):
