@@ -7,8 +7,20 @@ bot = Client(
     "my_bot",
     api_id=10027898,
     api_hash="c9fec38e3977983d2079069962c26206",
-    bot_token="5271107256:AAFjtvI6IoSsTDECxbR2zG-WnoI4ZPPrSzs",
-)
+    bot_token="5271107256:AAFjtvI6IoSsTDECxbR2zG-WnoI4ZPPrSzs",)
+
+KeyboardZ = ReplyKeyboardMarkup(
+    [
+        ["Start", "Help", "Login", "DC"],
+        ["A", "B", "C", "D"],
+        ["E", "F", "G", "H"],
+        ["Follow", "Ping", "Status"],
+        ["Maintainers"]
+
+    ],
+    resize_keyboard=True)
+
+
 
 
 @bot.on_message(filters.incoming & filters.command("run"))
