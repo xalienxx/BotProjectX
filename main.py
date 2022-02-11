@@ -14,6 +14,7 @@ KeyboardZ = ReplyKeyboardMarkup(
         ["Start", "Help", "Login", "DC"],
         ["A", "B", "C", "D"],
         ["E", "F", "G", "H"],
+        ["Test Audio"],
         ["Follow", "Ping", "Status"],
         ["Maintainers"]
 
