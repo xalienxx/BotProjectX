@@ -1,7 +1,12 @@
+import psutil
+import shutil
+import time
+from utils_bot import *
+from typing import Text
 from pyrogram import Client, filters
 from pyrogram.types import (InlineQueryResultArticle, InputTextMessageContent,
                             InlineKeyboardMarkup, InlineKeyboardButton)
-from pyrogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import ReplyKeyboardMarkup
 
 bot = Client(
     "my_bot",
@@ -83,5 +88,52 @@ def answer(client, inline_query):
         cache_time=1
     )
 
+@bot.on_message(filters.regex("DC"))
+async def start(bot, update):
+    text = START_TEXT.format(update.from_user.dc_id)
+    await update.reply_text(
+        text=text,
+        disable_web_page_preview=True,
+        quote=True
+    )
 
+START_TEXT = """ Your Telegram DC Is : `{}`  """
+
+@bot.on_message(filters.regex("Ping"))
+async def ping(bot, message):
+    start_t = time.time()
+    jv = await message.reply_text("....")
+    end_t = time.time()
+    time_taken_s = (end_t - start_t) * 1000
+    await jv.edit(f"Ping!\n{time_taken_s:.3f} ms")
+
+
+StartTime = time.time()
+
+
+@bot.on_message(filters.private & filters.regex("Status"))
+async def stats(bot, update):
+    currentTime = readable_time((time.time() - StartTime))
+    total, used, free = shutil.disk_usage('.')
+    total = get_readable_file_size(total)
+    used = get_readable_file_size(used)
+    free = get_readable_file_size(free)
+    sent = get_readable_file_size(psutil.net_io_counters().bytes_sent)
+    recv = get_readable_file_size(psutil.net_io_counters().bytes_recv)
+    cpuUsage = psutil.cpu_percent(interval=0.5)
+    memory = psutil.virtual_memory().percent
+    disk = psutil.disk_usage('/').percent
+    botstats = f'<b>Bot Uptime:</b> {currentTime}\n' \
+        f'<b>Total disk space:</b> {total}\n' \
+        f'<b>Used:</b> {used}  ' \
+        f'<b>Free:</b> {free}\n\n' \
+        f'Data Usage:\n<b>Upload:</b> {sent}\n' \
+        f'<b>Down:</b> {recv}\n\n' \
+        f'<b>CPU:</b> {cpuUsage}% ' \
+        f'<b>RAM:</b> {memory}% ' \
+        f'<b>Disk:</b> {disk}%'
+    await update.reply_text(botstats)
+
+    
+    
 bot.run()
